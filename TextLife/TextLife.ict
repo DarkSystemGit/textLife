@@ -266,18 +266,7 @@ assets:
     name: Main
     backgroundColor: '#000000'
     follow: Lf3g9Nq2htzJRB
-    backgrounds:
-      - depth: -2
-        texture: qj18H9D8JM6zjz
-        shiftX: 0
-        shiftY: 0
-        parallaxX: 1
-        parallaxY: 1
-        movementX: 0
-        movementY: 0
-        scaleX: 1
-        scaleY: 1
-        repeat: repeat
+    backgrounds: []
     copies:
       - x: 256
         'y': 144
@@ -48214,96 +48203,6 @@ assets:
             frame: 90
             rotation: 0
             texture: dR1PC7KzG3K1Qz
-          - x: 992
-            'y': 560
-            opacity: 1
-            tint: 16777215
-            scale:
-              x: 1
-              'y': 1
-            frame: 378
-            rotation: 0
-            texture: dR1PC7KzG3K1Qz
-          - x: 992
-            'y': 544
-            opacity: 1
-            tint: 16777215
-            scale:
-              x: 1
-              'y': 1
-            frame: 324
-            rotation: 0
-            texture: dR1PC7KzG3K1Qz
-          - x: 1008
-            'y': 528
-            opacity: 1
-            tint: 16777215
-            scale:
-              x: 1
-              'y': 1
-            frame: 324
-            rotation: 0
-            texture: dR1PC7KzG3K1Qz
-          - x: 1008
-            'y': 544
-            opacity: 1
-            tint: 16777215
-            scale:
-              x: 1
-              'y': 1
-            frame: 351
-            rotation: 0
-            texture: dR1PC7KzG3K1Qz
-          - x: 1008
-            'y': 544
-            opacity: 1
-            tint: 16777215
-            scale:
-              x: 1
-              'y': 1
-            frame: 378
-            rotation: 0
-            texture: dR1PC7KzG3K1Qz
-          - x: 1008
-            'y': 592
-            opacity: 1
-            tint: 16777215
-            scale:
-              x: 1
-              'y': 1
-            frame: 379
-            rotation: 0
-            texture: dR1PC7KzG3K1Qz
-          - x: 1008
-            'y': 576
-            opacity: 1
-            tint: 16777215
-            scale:
-              x: 1
-              'y': 1
-            frame: 325
-            rotation: 0
-            texture: dR1PC7KzG3K1Qz
-          - x: 992
-            'y': 576
-            opacity: 1
-            tint: 16777215
-            scale:
-              x: 1
-              'y': 1
-            frame: 379
-            rotation: 0
-            texture: dR1PC7KzG3K1Qz
-          - x: 992
-            'y': 560
-            opacity: 1
-            tint: 16777215
-            scale:
-              x: 1
-              'y': 1
-            frame: 325
-            rotation: 0
-            texture: dR1PC7KzG3K1Qz
           - x: 0
             'y': 0
             opacity: 1
@@ -48314,11 +48213,61 @@ assets:
             frame: 468
             rotation: 0
             texture: dR1PC7KzG3K1Qz
+          - x: 992
+            'y': 560
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            frame: 1
+            rotation: 0
+            texture: Kd25FBcNGr1PpH
+          - x: 960
+            'y': 560
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            frame: 2
+            rotation: 0
+            texture: Kd25FBcNGr1PpH
+          - x: 976
+            'y': 544
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            frame: 0
+            rotation: 0
+            texture: Kd25FBcNGr1PpH
+          - x: 992
+            'y': 560
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            frame: 1
+            rotation: 0
+            texture: Kd25FBcNGr1PpH
+          - x: 960
+            'y': 560
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            frame: 2
+            rotation: 0
+            texture: Kd25FBcNGr1PpH
         extends: {}
         hidden: false
         cache: true
     extends: {}
-    lastmod: 1710031165782
+    lastmod: 1710199369070
     events: []
     behaviors: []
     uid: b4WCK2m3G9MqQh
@@ -54066,6 +54015,34 @@ assets:
     isBlank: false
     source: /home/darksystem/textLife/animations/player.png
     r: 8
+  - lastmod: 1710199370044
+    type: texture
+    name: stairs
+    untill: 0
+    grid:
+      - 1
+      - 4
+    axis:
+      - 0
+      - 0
+    marginx: 0
+    marginy: 0
+    imgWidth: 32
+    imgHeight: 96
+    width: 32
+    height: 24
+    offx: 0
+    offy: 0
+    origname: iKd25FBcNGr1PpH.png
+    shape: rect
+    left: 0
+    right: 32
+    top: 0
+    bottom: 48
+    uid: Kd25FBcNGr1PpH
+    padding: 1
+    isBlank: false
+    source: /home/darksystem/textLife/animations/stairs.png
 settings:
   authoring:
     author: ''
