@@ -10,10 +10,11 @@ libs:
   keyboard: {}
   keyboard.polyfill: {}
   pointer.polyfill: {}
-  light: {}
   vgui: {}
   gamepad: {}
   vkeys: {}
+  tween: {}
+  transition: {}
 startroom: b4WCK2m3G9MqQh
 contentTypes: []
 actions:
@@ -53961,29 +53962,47 @@ assets:
     events:
       - eventKey: OnStep
         lib: core
-        code: this.move();
+        code: >
+          this.move();
+
+          var maxSpeed=30
+
+          if((this.speed>maxSpeed)&&(this.speed>0)){this.speed--}else{this.speed=this.speed-.25}
         arguments: {}
-      - eventKey: OnActionPress
-        code: ''
-        arguments:
-          action: ''
-        lib: core
       - eventKey: OnActionDown
-        code: this.x+=u.time * actions.MoveX.value
+        code: |-
+          this.hspeed+=actions.MoveX.value
+          if((this.anm>3)||(this.moveDir[0]!=actions.MoveX.value))this.anm=0
+          this.anm++
+          this.moveDir=[actions.MoveX.value,0]
         arguments:
           action: MoveX
         lib: core
       - eventKey: OnActionDown
-        code: this.y+=u.time * actions.MoveY.value
+        code: |-
+          this.vspeed+=actions.MoveY.value
+          if((this.anm>3)||(this.moveDir[1]!=actions.MoveY.value))this.anm=0
+          this.anm++
+          this.moveDir=[0,actions.MoveY.value]
         arguments:
           action: MoveY
         lib: core
       - eventKey: OnCreate
-        code: camera.follow = this;
+        code: |-
+          camera.follow = this;
+          this.anm=0
+          this.moveDir=[0,0]
+          this.timer1=1
         arguments: {}
         lib: core
+      - eventKey: Timer1
+        code: ''
+        arguments:
+          name: Animation
+          isUi: false
+        lib: core
     extends: {}
-    lastmod: 1710027702093
+    lastmod: 1710282417750
     uid: Lf3g9Nq2htzJRB
     behaviors: []
   - lastmod: 1710030843796
@@ -54045,9 +54064,9 @@ assets:
     source: /home/darksystem/textLife/animations/stairs.png
 settings:
   authoring:
-    author: ''
+    author: DarkSystem
     site: ''
-    title: ''
+    title: TextLife
     version:
       - 0
       - 0
