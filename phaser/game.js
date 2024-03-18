@@ -14,6 +14,16 @@ function loadBackground(phaser, name) {
     phaser.add.image(0, 0, name).setOrigin(0, 0)
 }
 
+function loadMap(phaser, map, tiles) {
+    phaser.load.tilemapCSV("map", `assets/${map}.csv`);
+    const map = phaser.make.tilemap({
+        key: "map",
+        tileWidth: 16,
+        tileHeight: 16
+    });
+    map.createLayer(0, map.addTilesetImage(tiles), 0, 0);
+}
+
 function loadScene(scene) {
     return {
         type: Phaser.AUTO,
