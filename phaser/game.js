@@ -1,12 +1,12 @@
 function load(phaser, assets) {
     assets.forEach(asset => {
         if (asset[1]) {
-            phaser.load.spritesheet(asset[0], `asstes/${asset[0]}.png`, {
+            phaser.load.spritesheet(asset[0], `assets/${asset[0]}.png`, {
                 frameWidth: asset[1],
                 frameHeight: asset[2]
             })
         }
-        phaser.load.image(asset[0], `asstes/${asset[0]}.png`)
+        phaser.load.image(asset[0], `assets/${asset[0]}.png`)
     });
 }
 var game;
