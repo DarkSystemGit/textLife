@@ -9,10 +9,13 @@ function load(phaser, assets) {
         phaser.load.image(asset[0], `assets/${asset[0]}.png`)
     });
 }
-var game;
+
+function loadBackground(phaser, name) {
+    phaser.add.image(0, 0, name).setOrigin(0, 0)
+}
 
 function loadScene(scene) {
-    game = {
+    return {
         type: Phaser.AUTO,
         width: window.innerWidth,
         height: window.innerHeight,
@@ -29,4 +32,4 @@ const main = {
     onFrame: () => {}
 }
 
-const game = new Phaser.Game(game);
+const game = new Phaser.Game();
