@@ -1,16 +1,16 @@
 {
-  "name": "textlife",
-  "version": "1.0.0",
-  "description": "TextLife game",
-  "main": "index.js",
-  "scripts": {
-    "start": "http-server -p 4040 ."
-  },
-  "author": "darksystem",
-  "license": "GPL-3.0-or-later",
-  "dependencies": {
-    "http-server": "^14.1.1",
-    "nodemon": "^3.1.0",
-    "phaser": "^3.80.1"
-  }
+    "name": "textlife",
+    "version": "1.0.0",
+    "description": "TextLife game",
+    "main": "index.js",
+    "scripts": {
+        "start": "nodemon --exec \" http-server -p 4041 .\" "
+    },
+    "author": "darksystem",
+    "license": "GPL-3.0-or-later",
+    "dependencies": {
+        "http-server": "^14.1.1",
+        "nodemon": "^3.1.0",
+        "phaser": "^3.80.1"
+    }
 }
