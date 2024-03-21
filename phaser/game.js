@@ -20,8 +20,8 @@ function load(phaser, assets) {
 function loadScene(scene) {
     return {
         type: Phaser.AUTO,
-        width: 800,
-        height: 400,
+        width: window.innerWidth,
+        height: window.innerHeight,
         pixelArt: true,
         parent: "game",
         scene: {
