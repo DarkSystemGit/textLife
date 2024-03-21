@@ -20,9 +20,10 @@ function load(phaser, assets) {
 function loadScene(scene) {
     return {
         type: Phaser.AUTO,
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: 800,
+        height: 400,
         pixelArt: true,
+        parent: "game",
         scene: {
             preload: scene.onStart,
             create: scene.onCreate,
@@ -38,30 +39,33 @@ function loadScene(scene) {
 }
 var player;
 const main = {
-    onStart: () => {
+    onStart: function ()  {
+
         load(this,[['main','map'],['citytiles','img'],['schoolassets','img']])
     },
-    onCreate: () => {
+    onCreate: function ()  {
         const map = this.make.tilemap({ key: "main" });
-        const citytileset = map.addTilesetImage("schoolassets", "schoolassets");
-        const itemstileset = map.addTilesetImage("citytiles", "citytiles");
-        map.createLayer("Ground", [citytileset,itemstileset], 0, 0);
-        map.createLayer("Objects", [citytileset,itemstileset], 0, 0);
-        map.createLayer("Collision", [citytileset,itemstileset], 0, 0);
+        const citytileset = map.addTilesetImage("schoolassets","schoolassets");
+        const itemstileset = map.addTilesetImage("citytiles","citytiles");
+        map.createLayer("Ground", ['citytiles','schoolassets'], 0, 0);
+        map.createLayer("Objects", ['citytiles','schoolassets'], 0, 0);
+        map.createLayer("Collision", ['citytiles','schoolassets'], 0, 0);
         const cursors = this.input.keyboard.createCursorKeys();
+        const camera = this.cameras.main;
+        camera.zoom=5
         controls = new Phaser.Cameras.Controls.FixedKeyControl({
           camera: camera,
           left: cursors.left,
           right: cursors.right,
           up: cursors.up,
           down: cursors.down,
-          speed: 0.5
+          speed: 0.1
         });
       
         // Constrain the camera so that it isn't allowed to move outside the width/height of tilemap
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     },
-    onFrame: (time,delta) => {
+    onFrame: function (time,delta)  {
         controls.update(delta);
     }
 }
