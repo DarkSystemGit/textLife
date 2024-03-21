@@ -52,7 +52,7 @@ const main = {
         map.createLayer("Collision", ['citytiles','schoolassets'], 0, 0);
         const cursors = this.input.keyboard.createCursorKeys();
         const camera = this.cameras.main;
-        camera.zoom=5
+        camera.zoom=10
         controls = new Phaser.Cameras.Controls.FixedKeyControl({
           camera: camera,
           left: cursors.left,
