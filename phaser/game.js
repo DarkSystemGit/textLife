@@ -1,11 +1,11 @@
-
+var player;
 function load(phaser, assets) {
     assets.forEach(asset => {
         switch (asset[1]) {
             case 'ss':
                 phaser.load.spritesheet(asset[0], `assets/${asset[0]}.png`, {
-                    frameWidth: asset[1],
-                    frameHeight: asset[2]
+                    frameWidth: 16,
+                    frameHeight: 16
                 })
             case 'img':
                 phaser.load.image(asset[0], `assets/${asset[0]}.png`)
@@ -42,9 +42,34 @@ var player;
 const main = {
     onStart: function () {
 
-        load(this, [['main', 'map'], ['citytiles', 'img'], ['schoolassets', 'img']])
+        load(this, [['main', 'map'], ['citytiles', 'img'], ['schoolassets', 'img'],['player','ss']])
     },
     onCreate: function () {
+        player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "atlas", "misa-front")
+        this.anims.create({
+            key: 'walkF',
+            frames: this.anims.generateFrameNumbers('player', { frames: [ 7, 8, 9] }),
+            frameRate: 8,
+            repeat: -1
+        })
+        this.anims.create({
+            key: 'walkB',
+            frames: this.anims.generateFrameNumbers('player', { frames: [ 4, 5, 6] }),
+            frameRate: 8,
+            repeat: -1
+        })
+        this.anims.create({
+            key: 'walkL',
+            frames: this.anims.generateFrameNumbers('player', { frames: [ 1, 2, 3] }),
+            frameRate: 8,
+            repeat: -1
+        })
+        this.anims.create({
+            key: 'walkR',
+            frames: this.anims.generateFrameNumbers('player', { frames: [ 10, 11, 12] }),
+            frameRate: 8,
+            repeat: -1
+        })
         const map = this.make.tilemap({ key: "main" });
         const citytileset = map.addTilesetImage("schoolassets", "schoolassets");
         const itemstileset = map.addTilesetImage("citytiles", "citytiles");
@@ -101,15 +126,18 @@ const main = {
   // Horizontal movement
   if (cursors.left.isDown) {
     player.body.setVelocityX(-speed);
+    player.anims.play("walkL", true);
   } else if (cursors.right.isDown) {
     player.body.setVelocityX(speed);
-  }
-
-  // Vertical movement
-  if (cursors.up.isDown) {
+    player.anims.play("walkR", true);
+  }else if (cursors.up.isDown) {
     player.body.setVelocityY(-speed);
+    player.anims.play("walkF", true);
   } else if (cursors.down.isDown) {
     player.body.setVelocityY(speed);
+    player.anims.play("walkB", true);
+  }else{
+    player.anims.stop()
   }
 
   // Normalize and scale the velocity so that player can't move faster along a diagonal
