@@ -45,7 +45,7 @@ const main = {
         load(this, [['main', 'map'], ['citytiles', 'img'], ['schoolassets', 'img'],['player','ss']])
     },
     onCreate: function () {
-        player = this.physics.add.sprite(0, 0, "spritesheet")
+        player = this.physics.add.sprite(0, 0, "spritesheet",'player')
         this.anims.create({
             key: 'walkF',
             frames: this.anims.generateFrameNumbers('player', { frames: [ 7, 8, 9] }),
