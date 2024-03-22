@@ -20,7 +20,7 @@ function load(phaser, assets) {
 
 function loadScene(scene) {
     return {
-        type: Phaser.AUTO,
+        type: Phaser.WEBGL,
         width: window.innerWidth,
         height: window.innerHeight,
         pixelArt: true,
@@ -42,45 +42,53 @@ var player;
 const main = {
     onStart: function () {
 
-        load(this, [['main', 'map'], ['citytiles', 'img'], ['schoolassets', 'img'],['player','ss']])
+        load(this, [['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
     },
     onCreate: function () {
-        player = this.physics.add.sprite(0, 0,'player')
+        const map = this.make.tilemap({ key: "main" });
+        const sp = map.findObject("data", obj => obj.name === "Spawn Point");
+        player = this.player = this.physics.add.sprite(sp.x, sp.y, 'player')
+        //player.frame=6
         this.anims.create({
             key: 'walkF',
-            frames: this.anims.generateFrameNumbers('player', { frames: [ 7, 8, 9] }),
+            frames: this.anims.generateFrameNumbers('player', { frames: [6, 7, 8] }),
             frameRate: 8,
             repeat: -1
         })
         this.anims.create({
             key: 'walkB',
-            frames: this.anims.generateFrameNumbers('player', { frames: [ 4, 5, 6] }),
+            frames: this.anims.generateFrameNumbers('player', { frames: [3, 4, 5] }),
             frameRate: 8,
             repeat: -1
         })
         this.anims.create({
             key: 'walkL',
-            frames: this.anims.generateFrameNumbers('player', { frames: [ 1, 2, 3] }),
+            frames: this.anims.generateFrameNumbers('player', { frames: [0, 1, 2] }),
             frameRate: 8,
             repeat: -1
         })
         this.anims.create({
             key: 'walkR',
-            frames: this.anims.generateFrameNumbers('player', { frames: [ 10, 11, 12] }),
+            frames: this.anims.generateFrameNumbers('player', { frames: [9, 10, 11] }),
             frameRate: 8,
             repeat: -1
         })
-        const map = this.make.tilemap({ key: "main" });
-        const citytileset = map.addTilesetImage("schoolassets", "schoolassets");
-        const itemstileset = map.addTilesetImage("citytiles", "citytiles");
-        map.createLayer("Ground", ['citytiles', 'schoolassets'], 0, 0);
-        var objs = map.createLayer("Objects", ['citytiles', 'schoolassets'], 0, 0);
-        var coll = map.createLayer("Collision", ['citytiles', 'schoolassets'], 0, 0);
-        coll.setCollisionByExclusion([])
-        coll.setDepth(10)
-        objs.setDepth(11)
+
+        map.addTilesetImage("schoolassets", "schoolassets");
+        map.addTilesetImage("citytiles", "citytiles");
+        map.addTilesetImage("ground", "ground");
+        var grnd = map.createLayer("Ground", ['citytiles', 'schoolassets', 'ground'], 0, 0);
+        var objs = map.createLayer("Objects", ['citytiles', 'schoolassets', 'ground'], 0, 0);
+        var coll = map.createLayer("Collision", ['citytiles', 'schoolassets', 'ground'], 0, 0);
+        var cl = map.createLayer("cleanup", ['citytiles', 'schoolassets', 'ground'], 0, 0);
+        coll.setCollisionByExclusion([]);
+        cl.setCollisonByProperty({ col: true })
+        coll.setDepth(11)
+        objs.setDepth(12)
+        grnd.setDepth(9)
+        cl.setDepth(10)
         this.physics.add.collider(player, coll);
-        const cursors = this.input.keyboard.createCursorKeys();
+        const cursors = this.cursors = this.input.keyboard.createCursorKeys();
         const camera = this.cameras.main;
         camera.zoom = 10
         camera.startFollow(player);
@@ -90,58 +98,54 @@ const main = {
 
         const width = this.scale.width
         const height = this.scale.height
-        const rt = this.make.renderTexture({
+        const rt = this.rt=this.make.renderTexture({
             width,
             height
         }, true)
 
         // fill it with black
-        rt.fill(0x000000, 1)
-        rt.setTint(0x0a2948)
-        const vision = this.make.image({
-            x: this.player.x,
-            y: this.player.y,
-            key: 'vision',
-            add: false
-        })
-        vision.scale = 2.5
 
-        rt.mask = new Phaser.Display.Masks.BitmapMask(this, vision)
-        rt.mask.invertAlpha = true
+
+        rt.setDepth(15)
+        player.setDepth(15)
     },
     onFrame: function (time, delta) {
-        controls.update(delta);
+
 
         if (this.vision) {
             this.vision.x = this.player.x
             this.vision.y = this.player.y
         }
-        
-         const speed = 175;
-  const prevVelocity = player.body.velocity.clone();
 
-  // Stop any previous movement from the last frame
-  player.body.setVelocity(0);
+        const speed = 175;
+        const prevVelocity = player.body.velocity.clone();
 
-  // Horizontal movement
-  if (cursors.left.isDown) {
-    player.body.setVelocityX(-speed);
-    player.anims.play("walkL", true);
-  } else if (cursors.right.isDown) {
-    player.body.setVelocityX(speed);
-    player.anims.play("walkR", true);
-  }else if (cursors.up.isDown) {
-    player.body.setVelocityY(-speed);
-    player.anims.play("walkF", true);
-  } else if (cursors.down.isDown) {
-    player.body.setVelocityY(speed);
-    player.anims.play("walkB", true);
-  }else{
-    player.anims.stop()
-  }
+        // Stop any previous movement from the last frame
+        player.body.setVelocity(0);
 
-  // Normalize and scale the velocity so that player can't move faster along a diagonal
-  player.body.velocity.normalize().scale(speed);
+        // Horizontal movement
+        if (this.cursors.left.isDown) {
+            player.body.setVelocityX(-speed);
+            player.anims.play("walkL", true);
+        } else if (this.cursors.right.isDown) {
+            player.body.setVelocityX(speed);
+            player.anims.play("walkR", true);
+        } else if (this.cursors.up.isDown) {
+            player.body.setVelocityY(-speed);
+            player.anims.play("walkF", true);
+        } else if (this.cursors.down.isDown) {
+            player.body.setVelocityY(speed);
+            player.anims.play("walkB", true);
+        } else {
+            player.anims.stop()
+        }
+
+        // Normalize and scale the velocity so that player can't move faster along a diagonal
+        player.body.velocity.normalize().scale(speed);
+        this.rt.clear();
+        this.rt.fill(0x000000, 1)
+        this.rt.setTint(0x0a2948)
+        this.rt.erase('mask', this.player.x - 107, this.player.y - 107)
 
     }
 }
