@@ -82,7 +82,8 @@ const main = {
         var coll = map.createLayer("Collision", ['citytiles', 'schoolassets', 'ground'], 0, 0);
         var cl = map.createLayer("cleanup", ['citytiles', 'schoolassets', 'ground'], 0, 0);
         coll.setCollisionByExclusion([]);
-        cl.setCollisonByProperty({ col: true })
+        cl.setCollisionByProperty({ col: true })
+        
         coll.setDepth(11)
         objs.setDepth(12)
         grnd.setDepth(9)
