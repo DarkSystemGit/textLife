@@ -45,7 +45,7 @@ const main = {
         load(this, [['main', 'map'], ['citytiles', 'img'], ['schoolassets', 'img'],['player','ss']])
     },
     onCreate: function () {
-        player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "atlas", "misa-front")
+        player = this.physics.add.sprite(0, 0, "spritesheet")
         this.anims.create({
             key: 'walkF',
             frames: this.anims.generateFrameNumbers('player', { frames: [ 7, 8, 9] }),
