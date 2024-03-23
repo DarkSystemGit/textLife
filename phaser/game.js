@@ -8,6 +8,7 @@ function load(phaser, assets) {
                     frameHeight: 16
                 })
             case 'img':
+                console.log(`assets/${asset[0]}.png`)
                 phaser.load.image(asset[0], `assets/${asset[0]}.png`)
             case 'map':
                 phaser.load.tilemapTiledJSON(asset[0], `assets/maps/${asset[0]}.json`)
@@ -42,7 +43,7 @@ var player;
 const main = {
     onStart: function () {
 
-        load(this, [['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
+        load(this, [['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['emotes','ss']['chars','img'],['schoolassets', 'img'], ['player', 'ss']])
     },
     onCreate: function () {
         const map = this.make.tilemap({ key: "main" });
@@ -77,18 +78,22 @@ const main = {
         map.addTilesetImage("schoolassets", "schoolassets");
         map.addTilesetImage("citytiles", "citytiles");
         map.addTilesetImage("ground", "ground");
-        var grnd = map.createLayer("Ground", ['citytiles', 'schoolassets', 'ground'], 0, 0);
-        var objs = map.createLayer("Objects", ['citytiles', 'schoolassets', 'ground'], 0, 0);
-        var coll = map.createLayer("Collision", ['citytiles', 'schoolassets', 'ground'], 0, 0);
-        var cl = map.createLayer("cleanup", ['citytiles', 'schoolassets', 'ground'], 0, 0);
-        coll.setCollisionByProperty({ col: true })
+        var grnd = map.createLayer("Ground", ['citytiles', 'schoolassets', 'ground','chars'], 0, 0);
+        var objs = map.createLayer("Objects", ['citytiles', 'schoolassets', 'ground','chars'], 0, 0);
+        var coll = map.createLayer("Collision", ['citytiles', 'schoolassets', 'ground','chars'], 0, 0);
+        var cl = map.createLayer("cleanup", ['citytiles', 'schoolassets', 'ground','chars'], 0, 0);
+        var cl2 = map.createLayer("cleanup2", ['citytiles', 'schoolassets', 'ground','chars'], 0, 0);
+        coll.setCollisionByExclusion([-1])
         cl.setCollisionByProperty({ col: true })
-        
-        coll.setDepth(11)
-        objs.setDepth(12)
+        cl2.setCollisionByExclusion([-1])
+        cl2.setDepth(14)
+        coll.setDepth(12)
+        objs.setDepth(11)
         grnd.setDepth(9)
         cl.setDepth(10)
         this.physics.add.collider(player, coll);
+        this.physics.add.collider(player, cl2);
+        //this.physics.add.collider(player, cl);
         const cursors = this.cursors = this.input.keyboard.createCursorKeys();
         const camera = this.cameras.main;
         camera.zoom = 10
@@ -106,9 +111,10 @@ const main = {
 
         // fill it with black
 
-
-        rt.setDepth(15)
-        player.setDepth(15)
+        
+        rt.setDepth(14)
+        player.setDepth(13)
+        console.log(map)
     },
     onFrame: function (time, delta) {
 
@@ -146,8 +152,12 @@ const main = {
         this.rt.clear();
         this.rt.fill(0x000000, 1)
         this.rt.setTint(0x0a2948)
-        this.rt.erase('mask', this.player.x - 107, this.player.y - 107)
-
+        this.rt.erase('mask', this.player.x - 53, this.player.y - 53)
+        const emotes=this.emotes=this.add.particles(player.x,player.y,{
+            frame:[''],
+            gravityY: 200,
+            emitting: false
+        })
     }
 }
 
