@@ -1,4 +1,4 @@
-var player;
+
 function load(phaser, assets) {
     assets.forEach(asset => {
         switch (asset[1]) {
@@ -39,11 +39,18 @@ function loadScene(scene) {
         }
     }
 }
+var hiding=false
+var attack=false
+var win=0
+var hour = [12, 0]
 var player;
+var hKey;
+var children;
+
 const main = {
     onStart: function () {
 
-        load(this, [['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['emotes','ss']['chars','img'],['schoolassets', 'img'], ['player', 'ss']])
+        load(this, [['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['emotes', 'img'], ['chars', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
     },
     onCreate: function () {
         const map = this.make.tilemap({ key: "main" });
@@ -78,14 +85,16 @@ const main = {
         map.addTilesetImage("schoolassets", "schoolassets");
         map.addTilesetImage("citytiles", "citytiles");
         map.addTilesetImage("ground", "ground");
-        var grnd = map.createLayer("Ground", ['citytiles', 'schoolassets', 'ground','chars'], 0, 0);
-        var objs = map.createLayer("Objects", ['citytiles', 'schoolassets', 'ground','chars'], 0, 0);
-        var coll = map.createLayer("Collision", ['citytiles', 'schoolassets', 'ground','chars'], 0, 0);
-        var cl = map.createLayer("cleanup", ['citytiles', 'schoolassets', 'ground','chars'], 0, 0);
-        var cl2 = map.createLayer("cleanup2", ['citytiles', 'schoolassets', 'ground','chars'], 0, 0);
+        map.addTilesetImage("chars", "chars");
+        var grnd = map.createLayer("Ground", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
+        var objs = map.createLayer("Objects", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
+        var coll = map.createLayer("Collision", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
+        var cl = map.createLayer("cleanup", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
+        var cl2 = map.createLayer("cleanup2", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
+       
         coll.setCollisionByExclusion([-1])
         cl.setCollisionByProperty({ col: true })
-        cl2.setCollisionByExclusion([-1])
+        //cl2.setCollisionByExclusion([-1])
         cl2.setDepth(14)
         coll.setDepth(12)
         objs.setDepth(11)
@@ -104,25 +113,24 @@ const main = {
 
         const width = this.scale.width
         const height = this.scale.height
-        const rt = this.rt=this.make.renderTexture({
+        const rt = this.rt = this.make.renderTexture({
             width,
             height
         }, true)
 
         // fill it with black
-
+        hKey=this.input.keyboard.addKey('H')
         
         rt.setDepth(14)
         player.setDepth(13)
         console.log(map)
     },
-    onFrame: function (time, delta) {
-
-
-        if (this.vision) {
-            this.vision.x = this.player.x
-            this.vision.y = this.player.y
-        }
+    onFrame: function (t, delta) {
+        if(win!=0){return}
+        if(hKey.isDown)hiding=!hiding
+        //console.log(getTime())
+        
+       document.getElementsByClassName('text')[0].innerText=getTime()
 
         const speed = 175;
         const prevVelocity = player.body.velocity.clone();
@@ -152,13 +160,66 @@ const main = {
         this.rt.clear();
         this.rt.fill(0x000000, 1)
         this.rt.setTint(0x0a2948)
-        this.rt.erase('mask', this.player.x - 53, this.player.y - 53)
-        const emotes=this.emotes=this.add.particles(player.x,player.y,{
-            frame:[''],
+        
+        if(!hiding)this.rt.erase('mask', this.player.x - 53, this.player.y - 53)
+        if(!hiding&&attack){win=-1;loss()}
+        if(hour[0]==6&&children==7){win=1;winGame()}
+        if(hour[0]==6&&hour[1]==5&&win==0){win=-1;loss()}
+        document.getElementById('hr').innerText=`${getTime().split(':')[0]} AM`
+        document.getElementById('rtime').innerText=`${Math.abs(6-hour[0])} hours remaining`
+
+
+        
+        /*const emotes=this.emotes=this.add.particles(player.x,player.y,{
+            frame:['emotes'],
             gravityY: 200,
             emitting: false
-        })
+        })*/
     }
 }
+function getTime() {
+    var res = `${hour[0]}:`
+    if(hour[0]==13){
+        hour[0]=1
+    }
+    if (hour[1] < 10) {
+        res = res + '0'
+    }
+    
+    if(hour[1]==0){document.getElementsByClassName('center')[0].style.display='block'}
+    if(hour[1]==5){document.getElementsByClassName('center')[0].style.display='none'}
+    return res + hour[1]
+}
+setInterval(() => {
+    if(hour[0]>=6&&hour[1]>=9&&hour[0]<12){
+        document.getElementsByTagName('canvas')[0].remove()
+        document.getElementsByClassName('game')[0].remove()
+        return
+    }
+    if (hour[1] == 60) {
+        hour[0]++
+        hour[1] = 0
+    } else {
+        hour[1]++
+    }
+    
+}, 1000)
 
+function loss(){
+ document.getElementsByTagName('canvas')[0].classList.add('fadeOut')
+ document.getElementsByClassName('game')[0].classList.add('fadeOut')
+ var txt=document.getElementsByClassName('endGame')[0]
+ txt.innerHTML='  <p>You Failed To Save Them.</p><p>You Shall Now Pay.</p>'
+ txt.style.top='40%'
+ txt.style.display='block'
+ 
+}
+function winGame(){
+    document.getElementsByTagName('canvas')[0].classList.add('fadeOut')
+    document.getElementsByClassName('game')[0].classList.add('fadeOut')
+    var txt=document.getElementsByClassName('endGame')[0]
+    txt.innerHTML='  <p>You Saved Them.</p><p>He Fled.</p><p>They now may live in peace, due to you.</p><p>Thank You!</p>'
+    txt.style.top='20%'
+    txt.style.display='block'
+}
 const game = new Phaser.Game(loadScene(main));
