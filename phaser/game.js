@@ -193,7 +193,7 @@ function getTime() {
     return res + hour[1]
 }
 setInterval(() => {
-    if((hour[0]>=6&&hour[1]>=9&&hour[0]<12)||(hour[1]>hattack+5&&win==-1)){
+    if((hour[0]>=6&&hour[1]>=9&&hour[0]<12)||(hour[1]>hattack+4&&win==-1)){
         document.getElementsByTagName('canvas')[0].remove()
         document.getElementsByClassName('game')[0].remove()
         return
