@@ -1,4 +1,6 @@
-
+function rand(max,min){
+    return Math.floor(Math.random() * (max - min + 1)) + min
+}
 function load(phaser, assets) {
     assets.forEach(asset => {
         switch (asset[1]) {
@@ -46,7 +48,7 @@ var hour = [12, 0]
 var player;
 var hKey;
 var children;
-
+var hattack=rand(50,10)
 const main = {
     onStart: function () {
 
@@ -199,10 +201,17 @@ setInterval(() => {
     if (hour[1] == 60) {
         hour[0]++
         hour[1] = 0
+        hattack=rand(50,10)
     } else {
         hour[1]++
     }
-    
+    if(hour[1]==hattack){
+        attack=true
+    }
+    if(hour[1]==hattack+2){
+        attack=false
+    }
+    console.log(attack)
 }, 1000)
 
 function loss(){
