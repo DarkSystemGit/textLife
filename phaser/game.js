@@ -95,7 +95,7 @@ const main = {
         var objs = map.createLayer("Objects", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
         var coll = map.createLayer("Collision", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
         var cl = map.createLayer("cleanup", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
-        var cl2 = map.createLayer("cleanup2", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
+        var cl2 =this.cl2= map.createLayer("cleanup2", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
 
         coll.setCollisionByExclusion([-1])
         cl.setCollisionByProperty({ col: true })
@@ -125,7 +125,7 @@ const main = {
 
         // fill it with black
         hKey = this.input.keyboard.addKey('H')
-        sKey = this.input.keyboard.addKey(this.input.keyboard.keyCodes.SPACE)
+        sKey = this.input.keyboard.addKey(32)
         rt.setDepth(14)
         player.setDepth(13)
         console.log(map)
@@ -133,16 +133,18 @@ const main = {
     onFrame: function (t, delta) {
         if (win != 0) { return }
         if (hKey.isDown) hiding = !hiding
-        //console.log(getTime())
-        if (sKey.getDuration() ==emo){
-        var closest=map.findObject("data", (obj) => {
-            if(obj.name === "h"&&getDistance(player.x,player.y,obj.x,obj.y)<=2){
+        console.log(emo,sKey.getDuration())
+        if (sKey.getDuration()>emo){
+        var closest=map.findTile((obj) => {
+            //if(obj.)
+            console.log(obj)
+            if(obj.properties.hum&&getDistance(player.x,player.y,obj.x,obj.y)<=3){
                 return obj
-            }
-        });
+            }}, null, 0, 0, map.width, map.height, {},this.cl2)
+            if(closest!={}){
         emo = rand(5000, 1000)
         map.removeTile(closest)
-        children++
+        children++}
         }
         document.getElementsByClassName('text')[0].innerText = getTime()
 
