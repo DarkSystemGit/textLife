@@ -56,7 +56,7 @@ var map;
 const main = {
     onStart: function () {
 
-        load(this, [['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['emotes', 'img'], ['chars', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
+        load(this, [['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['heartEmote', 'img'], ['chars', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
     },
     onCreate: function () {
         map = this.make.tilemap({ key: "main" });
@@ -123,10 +123,9 @@ const main = {
             width,
             height
         }, true)
-        const emotes=this.emotes=this.add.particles(player.x,player.y,{
+        const emotes=this.emotes=this.add.particles(player.x,player.y,'heartEmote',{
             x:()=>{return player.x},
             y:()=>{return player.y},
-            frame:'emotes',
             gravityY: 200,
             emitting: false
         })  
@@ -138,13 +137,14 @@ const main = {
         console.log(map)
     },
     onFrame: function (t, delta) {
+        var pointer = this.input.mousePointer.positionToCamera(this.cameras.main)
         if (win != 0) { return }
         if (hKey.isDown) hiding = !hiding
         if(sKey.isDown){
-
+            this.emotes.emitParticleAt(pointer.worldX, pointer.worldY, 1);
         }
         if (sKey.getDuration()>emo){
-        var pointer = this.input.mousePointer.positionToCamera(this.cameras.main)
+        
         var tile = this.cl2.getTileAt(...[map.worldToTileX(pointer.x), map.worldToTileY(pointer.y)])
         console.log(tile)
         if (tile != null) {
