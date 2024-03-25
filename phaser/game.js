@@ -44,12 +44,13 @@ function loadScene(scene) {
 var hiding = false
 var attack = false
 var win = 0
+var children=0
+var pointer=[0,0]
 var hour = [12, 0]
 var hattack = rand(50, 10)
 var emo = rand(5000, 1000)
 var player;
 var hKey;
-var children;
 var map;
 
 const main = {
@@ -122,7 +123,13 @@ const main = {
             width,
             height
         }, true)
-
+        const emotes=this.emotes=this.add.particles(player.x,player.y,{
+            x:()=>{return player.x},
+            y:()=>{return player.y},
+            frame:'emotes',
+            gravityY: 200,
+            emitting: false
+        })  
         // fill it with black
         hKey = this.input.keyboard.addKey('H')
         sKey = this.input.keyboard.addKey(32)
@@ -133,18 +140,19 @@ const main = {
     onFrame: function (t, delta) {
         if (win != 0) { return }
         if (hKey.isDown) hiding = !hiding
-        console.log(emo,sKey.getDuration())
+        if(sKey.isDown){
+
+        }
         if (sKey.getDuration()>emo){
-        var closest=map.findTile((obj) => {
-            //if(obj.)
-            console.log(obj)
-            if(obj.properties.hum&&getDistance(player.x,player.y,obj.x,obj.y)<=3){
-                return obj
-            }}, null, 0, 0, map.width, map.height, {},this.cl2)
-            if(closest!={}){
-        emo = rand(5000, 1000)
-        map.removeTile(closest)
-        children++}
+        var pointer = this.input.mousePointer.positionToCamera(this.cameras.main)
+        var tile = this.cl2.getTileAt(...[map.worldToTileX(pointer.x), map.worldToTileY(pointer.y)])
+        console.log(tile)
+        if (tile != null) {
+            emo = rand(5000, 1000)
+            map.removeTile(tile)
+            children++
+        }
+            
         }
         document.getElementsByClassName('text')[0].innerText = getTime()
 
@@ -186,11 +194,7 @@ const main = {
 
 
 
-        /*const emotes=this.emotes=this.add.particles(player.x,player.y,{
-            frame:['emotes'],
-            gravityY: 200,
-            emitting: false
-        })*/
+        
     }
 }
 function getTime() {
