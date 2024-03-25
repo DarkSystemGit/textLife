@@ -124,9 +124,10 @@ const main = {
             height
         }, true)
         const emotes=this.emotes=this.add.particles(player.x,player.y,'heartEmote',{
-            x:()=>{return player.x},
-            y:()=>{return player.y},
+            x:()=>{console.log(player.x);return player.x},
+            y:()=>{console.log(player.y);return player.y},
             gravityY: 200,
+            scale:1,
             emitting: false
         })  
         // fill it with black
@@ -142,9 +143,10 @@ const main = {
         if (hKey.isDown) hiding = !hiding
         if(sKey.isDown){
             this.emotes.emitParticleAt(pointer.worldX, pointer.worldY, 1);
+            console.log(pointer)
         }
         if (sKey.getDuration()>emo){
-        
+        //console.log(sKey)
         var tile = this.cl2.getTileAt(...[map.worldToTileX(pointer.x), map.worldToTileY(pointer.y)])
         console.log(tile)
         if (tile != null) {
@@ -214,7 +216,7 @@ function getDistance(x1, y1, x2, y2) {
     return Math.hypot(x2 - x1, y2 - y1)
 }
 setInterval(() => {
-    if ((hour[0] >= 6 && hour[1] >= 9 && hour[0] < 12) || (hour[1] > hattack + 4 && win == -1)) {
+    if ((hour[0] >= 6 && hour[1] >= 9 && hour[0] < 12) || (hour[1] > hattack + 3 && win == -1)) {
         document.getElementsByTagName('canvas')[0].remove()
         document.getElementsByClassName('game')[0].remove()
         return
