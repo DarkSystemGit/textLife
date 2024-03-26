@@ -61,7 +61,9 @@ const main = {
         load(this, [['ambeince', 'audio'], ['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['heartEmote', 'img'], ['chars', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
     },
     onCreate: function () {
-        this.sound.add('ambeince').play()
+        var mus=this.sound.add('ambeince',{volume:.5})
+        mus.loop=true
+        mus.play()
         map = this.make.tilemap({ key: "main" });
         const sp = map.findObject("data", obj => obj.name === "Spawn Point");
         player = this.player = this.physics.add.sprite(sp.x, sp.y, 'player')
