@@ -129,14 +129,13 @@ const main = {
             width,
             height
         }, true)
-        const emotes = this.emotes = this.add.particles(player.x, player.y, 'heartEmote', {
-            x: () => { console.log(player.x); return player.x },
-            y: () => { console.log(player.y); return player.y },
-            gravityY: 200,
+        const emotes = this.emotes = this.add.particles('heartEmote').createEmitter( {
+
+            gravityY: 100,
             scale: 1,
             emitting: false
         })
-        emotes.setDepth(14)
+        //emotes.setDepth(14)
         // fill it with black
         hKey = this.input.keyboard.addKey('H')
         sKey = this.input.keyboard.addKey(32)
@@ -149,8 +148,8 @@ const main = {
         if (win != 0) { return }
         if (hKey.isDown) hiding = !hiding
         if (sKey.isDown) {
-            this.emotes.emitParticleAt(pointer.worldX, pointer.worldY, 1);
-            console.log(pointer)
+            this.emotes.emitParticleAt(pointer[0], pointer[1], 1);
+            console.log(this.emotes)
         }
         if (sKey.getDuration() > emo) {
             //console.log(sKey)
