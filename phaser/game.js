@@ -10,10 +10,12 @@ function load(phaser, assets) {
                     frameHeight: 16
                 })
             case 'img':
-                console.log(`assets/${asset[0]}.png`)
+                //console.log(`assets/${asset[0]}.png`)
                 phaser.load.image(asset[0], `assets/${asset[0]}.png`)
             case 'map':
                 phaser.load.tilemapTiledJSON(asset[0], `assets/maps/${asset[0]}.json`)
+            case 'audio':
+                phaser.load.audio(asset[0], `assets/audio/${asset[0]}.mp3`)
         }
 
     });
@@ -44,8 +46,8 @@ function loadScene(scene) {
 var hiding = false
 var attack = false
 var win = 0
-var children=0
-var pointer=[0,0]
+var children = 0
+var pointer = [0, 0]
 var hour = [12, 0]
 var hattack = rand(50, 10)
 var emo = rand(5000, 1000)
@@ -56,9 +58,10 @@ var map;
 const main = {
     onStart: function () {
 
-        load(this, [['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['heartEmote', 'img'], ['chars', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
+        load(this, [['ambeince', 'audio'], ['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['heartEmote', 'img'], ['chars', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
     },
     onCreate: function () {
+        this.sound.add('mbeince').play()
         map = this.make.tilemap({ key: "main" });
         const sp = map.findObject("data", obj => obj.name === "Spawn Point");
         player = this.player = this.physics.add.sprite(sp.x, sp.y, 'player')
@@ -96,7 +99,7 @@ const main = {
         var objs = map.createLayer("Objects", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
         var coll = map.createLayer("Collision", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
         var cl = map.createLayer("cleanup", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
-        var cl2 =this.cl2= map.createLayer("cleanup2", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
+        var cl2 = this.cl2 = map.createLayer("cleanup2", ['citytiles', 'schoolassets', 'ground', 'chars'], 0, 0);
 
         coll.setCollisionByExclusion([-1])
         cl.setCollisionByProperty({ col: true })
@@ -123,13 +126,13 @@ const main = {
             width,
             height
         }, true)
-        const emotes=this.emotes=this.add.particles(player.x,player.y,'heartEmote',{
-            x:()=>{console.log(player.x);return player.x},
-            y:()=>{console.log(player.y);return player.y},
+        const emotes = this.emotes = this.add.particles(player.x, player.y, 'heartEmote', {
+            x: () => { console.log(player.x); return player.x },
+            y: () => { console.log(player.y); return player.y },
             gravityY: 200,
-            scale:1,
+            scale: 1,
             emitting: false
-        })  
+        })
         // fill it with black
         hKey = this.input.keyboard.addKey('H')
         sKey = this.input.keyboard.addKey(32)
@@ -141,20 +144,20 @@ const main = {
         var pointer = this.input.mousePointer.positionToCamera(this.cameras.main)
         if (win != 0) { return }
         if (hKey.isDown) hiding = !hiding
-        if(sKey.isDown){
+        if (sKey.isDown) {
             this.emotes.emitParticleAt(pointer.worldX, pointer.worldY, 1);
             console.log(pointer)
         }
-        if (sKey.getDuration()>emo){
-        //console.log(sKey)
-        var tile = this.cl2.getTileAt(...[map.worldToTileX(pointer.x), map.worldToTileY(pointer.y)])
-        console.log(tile)
-        if (tile != null) {
-            emo = rand(5000, 1000)
-            map.removeTile(tile)
-            children++
-        }
-            
+        if (sKey.getDuration() > emo) {
+            //console.log(sKey)
+            var tile = this.cl2.getTileAt(...[map.worldToTileX(pointer.x), map.worldToTileY(pointer.y)])
+            console.log(tile)
+            if (tile != null) {
+                emo = rand(5000, 1000)
+                map.removeTile(tile)
+                children++
+            }
+
         }
         document.getElementsByClassName('text')[0].innerText = getTime()
 
@@ -196,7 +199,7 @@ const main = {
 
 
 
-        
+
     }
 }
 function getTime() {
