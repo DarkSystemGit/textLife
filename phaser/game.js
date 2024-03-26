@@ -45,6 +45,7 @@ function loadScene(scene) {
 }
 var hiding = false
 var attack = false
+var preattack=false
 var win = 0
 var children = 0
 var pointer = [0, 0]
@@ -58,7 +59,7 @@ var map;
 const main = {
     onStart: function () {
 
-        load(this, [['ambeince', 'audio'], ['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['heartEmote', 'img'], ['chars', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
+        load(this, [['ambeince', 'audio'],['bully','audio'], ['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['heartEmote', 'img'], ['chars', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
     },
     onCreate: function () {
         var mus=this.sound.add('ambeince',{volume:.5})
@@ -135,6 +136,7 @@ const main = {
             scale: 1,
             emitting: false
         })
+        emotes.setDepth(14)
         // fill it with black
         hKey = this.input.keyboard.addKey('H')
         sKey = this.input.keyboard.addKey(32)
@@ -191,7 +193,10 @@ const main = {
         this.rt.clear();
         this.rt.fill(0x000000, 1)
         this.rt.setTint(0x0a2948)
-
+        if(preattack){
+            preattack=false
+            this.sound.add('bully',{volume:.25}).play()
+        }
         if (!hiding) this.rt.erase('mask', this.player.x - 53, this.player.y - 53)
         if (!hiding && attack) { win = -1; loss() }
         if (hour[0] == 6 && children == 7) { win = 1; winGame() }
@@ -232,6 +237,9 @@ setInterval(() => {
         hattack = rand(50, 10)
     } else {
         hour[1]++
+    }
+    if (hour[1] == hattack-5) {
+        preattack=true
     }
     if (hour[1] == hattack) {
         attack = true
