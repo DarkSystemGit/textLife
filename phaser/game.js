@@ -195,7 +195,7 @@ const main = {
         this.rt.setTint(0x0a2948)
         if(preattack){
             preattack=false
-            this.sound.add('bully',{volume:.25}).play()
+            this.sound.add('bully',{volume:.5}).play()
         }
         if (!hiding) this.rt.erase('mask', this.player.x - 53, this.player.y - 53)
         if (!hiding && attack) { win = -1; loss() }
