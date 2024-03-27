@@ -46,8 +46,10 @@ function loadScene(scene) {
 var hiding = false
 var attack = false
 var preattack=false
+var chldcol=false
 var win = 0
 var children = 0
+var fadeTime=0
 var pointer = [0, 0]
 var hour = [12, 0]
 var hattack = rand(50, 10)
@@ -59,7 +61,7 @@ var map;
 const main = {
     onStart: function () {
 
-        load(this, [['ambeince', 'audio'],['bully','audio'], ['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['heartEmote', 'img'], ['chars', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
+        load(this, [['ambeince', 'audio'],['bully','audio'],['child','audio'], ['main', 'map'], ['citytiles', 'img'], ['ground', 'img'], ['mask', 'img'], ['heartEmote', 'img'], ['chars', 'img'], ['schoolassets', 'img'], ['player', 'ss']])
     },
     onCreate: function () {
         var mus=this.sound.add('ambeince',{volume:.5})
@@ -129,13 +131,13 @@ const main = {
             width,
             height
         }, true)
-        const emotes = this.emotes = this.add.particles('heartEmote').createEmitter( {
+       /* const emotes = this.emotes = this.add.particles('heartEmote').createEmitter( {
 
             gravityY: 100,
             scale: 1,
             emitting: false
         })
-        //emotes.setDepth(14)
+        //emotes.setDepth(14)*/
         // fill it with black
         hKey = this.input.keyboard.addKey('H')
         sKey = this.input.keyboard.addKey(32)
@@ -147,18 +149,21 @@ const main = {
         var pointer = this.input.mousePointer.positionToCamera(this.cameras.main)
         if (win != 0) { return }
         if (hKey.isDown) hiding = !hiding
-        if (sKey.isDown) {
-            this.emotes.emitParticleAt(pointer[0], pointer[1], 1);
-            console.log(this.emotes)
-        }
+
         if (sKey.getDuration() > emo) {
             //console.log(sKey)
             var tile = this.cl2.getTileAt(...[map.worldToTileX(pointer.x), map.worldToTileY(pointer.y)])
             console.log(tile)
             if (tile != null) {
+                this.sound.add('child').play()
                 emo = rand(5000, 1000)
                 map.removeTile(tile)
                 children++
+                var wrd='Children';
+                if(7-children==1)wrd='Child'
+                document.getElementById('hr').innerText = `${7-children} ${wrd} Left`
+                document.getElementById('rtime').innerText=``
+                chldcol=true
             }
 
         }
@@ -200,9 +205,10 @@ const main = {
         if (!hiding && attack) { win = -1; loss() }
         if (hour[0] == 6 && children == 7) { win = 1; winGame() }
         if (hour[0] == 6 && hour[1] == 5 && win == 0) { win = -1; loss() }
+        if(hour[1]>55||hour[1]<6){
         document.getElementById('hr').innerText = `${getTime().split(':')[0]} AM`
         document.getElementById('rtime').innerText = `${Math.abs(6 - hour[0])} hours remaining`
-
+        }
 
 
 
@@ -217,8 +223,8 @@ function getTime() {
         res = res + '0'
     }
 
-    if (hour[1] == 0) { document.getElementsByClassName('center')[0].style.display = 'block' }
-    if (hour[1] == 5) { document.getElementsByClassName('center')[0].style.display = 'none' }
+    if (hour[1] == 0||chldcol) { document.getElementsByClassName('center')[0].style.display = 'block';chldcol=false;fadeTime=hour[1]+5 }
+    if (hour[1] == fadeTime) { document.getElementsByClassName('center')[0].style.display = 'none' }
     return res + hour[1]
 }
 function getDistance(x1, y1, x2, y2) {
